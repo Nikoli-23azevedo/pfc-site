@@ -5,69 +5,346 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Teenage</title>
+    <title>Teenage IA</title>
+
     <script type="importmap">
-            {
-              "imports": {
-                "@google/generative-ai": "https://esm.run/@google/generative-ai"
-              }
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai",
+                "axios": "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
             }
-          </script>
-    <ul id="menu">
-        <div>
-            <h1>Teenage IA</h1>
-        </div>
-        <div>
-            <li><a href="index.html">Início</a></li>
-            <li><a href="relatos.html">Relatos</a></li>
-            <li><a href="ia.html">IA</a></li>
-            <li><a href="sobre.html">Sobre Nós</a></li>
-        </div>
-    </ul>
+        }
+    </script>
+
+    <style>
+        /* Estilos para o contêiner principal da navbar */
+        .navbar-container {
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            margin: 0 20px;
+            padding: 10px 0;
+        }
+
+        /* Estilos para a navbar */
+        #menu {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            width: 100%;
+            max-width: 1256px;
+        }
+
+        /* Estilos para o logotipo e texto */
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            margin-right: 5px;
+        }
+
+        /* Estilos para os itens da navbar */
+        #menu li {
+            list-style-type: none;
+            display: inline;
+            margin-right: 15px;
+        }
+
+        /* Espaço para evitar sobreposição da navbar */
+        .spaco-container {
+            margin-top: 80px;
+        }
+
+        /* Ajustes do layout do chatbot */
+        .chat-container {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
+            background-color: #f4f4f9;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+        }
+
+        .chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        textarea {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            resize: none;
+            box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            padding: 10px 30px;
+            background-color: #663399;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #5a2e88;
+        }
+
+        /* Estilos para as mensagens */
+        .message {
+            margin: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 60%;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            clear: both;
+        }
+
+        /* Mensagens do usuário à direita */
+        .user-message {
+            background-color: #dcd6ff;
+            text-align: right;
+            float: right;
+        }
+
+        /* Mensagens da IA à esquerda */
+        .ai-message {
+            background-color: #f1f1f1;
+            text-align: left;
+            float: left;
+        }
+
+        /* Faz as mensagens se alinharem corretamente e evita que quebrem o layout */
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .typing-indicator {
+            font-style: italic;
+            color: #999;
+            display: none;
+            margin: 10px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Navbar -->
+    <div class="navbar-container">
+        <ul id="menu">
+            <div class="logo-container">
+                <img src="teenagelogo.png" alt="Teenage Emotions Logo">
+                <h1>Teenage Emotions</h1>
+            </div>
+            <div>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="relatos.html">Relatos</a></li>
+                <li><a href="ia.html">IA</a></li>
+                <li><a href="sobre.html">Sobre Nós</a></li>
+            </div>
+        </ul>
+    </div>
 
-    <form>
-        <label>Prompt</label>
-        <br>
-        <textarea cols="40" rows="20" name="prompt" id="prompt"></textarea>
-        <br>
-        <br>
-        <input type="button" value="Enviar" />
-        <br>
-        <br>
-        <label>Resposta</label>
-        <br>
-        <textarea cols="40" rows="20" name="prompt" id="resposta"></textarea>
-    </form>
-    <html>
+    <!-- Espaço abaixo da navbar fixa -->
+    <div class="spaco-container"></div>
 
-    <!-- ... Your HTML and CSS -->
-    <!-- Import @google/generative-ai, as shown above. -->
+    <!-- Conteúdo do chatbot -->
+    <main>
+        <div class="chat-container">
+            <div id="chat-box" class="chat-box"></div>
+            <div class="typing-indicator" id="typing">Digitando...</div>
+            <div class="input-area">
+                <textarea id="prompt" placeholder="Digite sua mensagem..." rows="3"></textarea>
+                <button id="send-button">Enviar</button>
+            </div>
+        </div>
+    </main>
+
     <script type="module">
+        const history = [
+            {
+                role: "user",
+                parts: [
+                    { text: "Você é uma espécie de orientador, no qual conversa, dá conselhos e encaminha para um responsável medico psicólogo profissional caso a conversa tome um rumo perigoso. Caso aconteça alguma situação grave ou fale algo grave. você deve cortar o assunto imediatamente e solicitar a pessoa a ligar para o cvv ou algo mais crítico. Você não pode dar respostas com menos de 15 palavras. Caso aconteça, reenvie a mensagem. Sendo isso, atenda as pessoas de forma cuidadosa, cautelosa e paciente." },
+                ],
+            },
+        ];
+
         import { GoogleGenerativeAI } from "@google/generative-ai";
 
-        // Fetch your API_KEY
         const API_KEY = "AIzaSyAZiRcKQnUxl8KmDmux1KUreqnjRD_10Ew";
-
-        // Access your API key (see "Set up your API key" above)
         const genAI = new GoogleGenerativeAI(API_KEY);
-
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        document.querySelector("input[type=button]").addEventListener("click", run);
+        const generationConfig = {
+            temperature: 1,
+            topP: 0.95,
+            topK: 64,
+            maxOutputTokens: 8192,
+            responseMimeType: "text/plain",
+        };
+
+        document.getElementById("send-button").addEventListener("click", run);
+        document.getElementById("prompt").addEventListener("keydown", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Evita a quebra de linha
+                run();
+            }
+        });
+
+        // Função para simular o efeito de máquina de escrever
+        function typeWriter(element, text, callback) {
+            let index = 0;
+            const speed = 50; // A velocidade da digitação em milissegundos
+
+            function typing() {
+                if (index < text.length) {
+                    element.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(typing, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            typing();
+        }
+
+        // Função para enviar a mensagem de apresentação
+        async function sendIntroMessage() {
+            const introMessage = "Olá! Eu sou sua assistente virtual. Sou uma espécie de orientadora, dou conselhos e sugestões, e posso te encaminhar para um responsável médico psicólogo profissional, caso necessário. Como posso ajudar você hoje?";
+            history.push({
+                role: "model",
+                parts: [{ text: introMessage }],
+            });
+
+            const chatBox = document.getElementById("chat-box");
+
+            // Adiciona a mensagem da IA com animação
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.className = "message ai-message clearfix fade-in";
+            chatBox.appendChild(aiMessageDiv); // Adiciona à caixa de chat
+
+            typeWriter(aiMessageDiv, introMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
         async function run() {
-            const prompt = "Você é uma espécie de orientador, no qual conversa, dá conselhos e encaminha para um responsável medico psicólogo profissional caso a conversa tome um rumo perigoso. Caso aconteça alguma cituacao grave ou fale algo grave. voce deve cortar o assunto imediatamente e solicitar a pessoa a ligar para o cvv ou algo mais critico. Voce nao pode dar respostas com menos de 15 palavras. Caso aconteca, reenvie a mensagem. Sendo isso, responda o próximo prompt com esses quesitos: " + document.getElementById("prompt").value;
+            const promptUsuario = document.getElementById("prompt").value;
 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-            document.getElementById("resposta").value = text;
-            console.log(text);
+            // Adiciona a mensagem do usuário ao histórico
+            history.push({
+                role: "user",
+                parts: [{ text: promptUsuario }],
+            });
+
+            const chatBox = document.getElementById("chat-box");
+
+            // Adiciona a mensagem do usuário com animação
+            chatBox.innerHTML += `<div class="message user-message clearfix fade-in">${promptUsuario}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Mostra a mensagem "Digitando..."
+            const typingMessage = document.getElementById("typing");
+            typingMessage.style.display = 'block';
+
+            const chatSession = model.startChat({
+                generationConfig,
+                history,
+            });
+
+            // Simula um atraso para a resposta da IA
+            setTimeout(async () => {
+                const result = await chatSession.sendMessage(promptUsuario);
+                const response = await result.response;
+                const text = await response.text();
+
+                // Esconde a mensagem "Digitando..."
+                typingMessage.style.display = 'none';
+
+                // Cria um novo elemento para a mensagem da IA
+                const aiMessageDiv = document.createElement('div');
+                aiMessageDiv.className = "message ai-message clearfix fade-in";
+                chatBox.appendChild(aiMessageDiv); // Adiciona à caixa de chat
+
+                // Usa a função typeWriter para simular a digitação
+                typeWriter(aiMessageDiv, text);
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Limpa o campo de entrada
+                document.getElementById("prompt").value = "";
+            }, 1000); // Atraso de 1 segundo para simular a digitação
+        }
+
+        // Chama a função para enviar a mensagem de apresentação quando a página é carregada
+        window.onload = sendIntroMessage;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function enviarMensagem() {
+            const mensagem = document.getElementById('prompt').value;
+
+            // Limpa o campo de entrada
+            document.getElementById("prompt").value = "";
+
+            const dados = {
+                usuario: 'Usuário',
+                mensagem: mensagem
+            };
+
+            axios.post('http://localhost:3000/historico', dados)
+                .then(response => {
+                    console.log('Resposta do servidor:', response.data);
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar mensagem:', error);
+                });
         }
     </script>
+
 </body>
 
 </html>
