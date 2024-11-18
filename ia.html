@@ -192,23 +192,7 @@
 
     <!-- Conteúdo do chatbot -->
     <main>
-    <!-- Aviso de seleção de avatar -->
-<div id="alert-message" class="alert">
-    <div class="avatar-selection-container">
-        <h2>Escolha seu Avatar</h2>
-        <p>Por favor, selecione a foto que você mais gosta:</p>
-        <div class="avatar-grid">
-            <img src="anna.png" alt="Avatar Anna" class="avatar" onclick="selectAvatar('avatar1.png')">
-            <img src="nic.png" alt="Avatar Nic" class="avatar" onclick="selectAvatar('avatar2.png')">
-            <img src="nik.png" alt="Avatar Nik" class="avatar" onclick="selectAvatar('avatar3.png')">
-        </div>
-        <div id="selected-avatar" class="selected-avatar"></div>
-    </div>
-</div>
-
-
-            </div>
-        </div>
+   
         <div class="chat-container">
             <div id="chat-box" class="chat-box"></div>
             <div class="typing-indicator" id="typing">Digitando...</div>
@@ -231,14 +215,14 @@
 
         import { GoogleGenerativeAI } from "@google/generative-ai";
 
-        const API_KEY = "AIzaSyCQOhRV20pKZ32qU0oCjtKgjZSr1qV9fGA";
+        const API_KEY = "AIzaSyA88bIiHnpOQWfbFhpxIlOlN1K36VmuFPY";
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const generationConfig = {
             temperature: 1,
             topP: 0.95,
-            topK: 64,
+            topK: 40,
             maxOutputTokens: 8192,
             responseMimeType: "text/plain",
         };
@@ -290,6 +274,7 @@
         async function run() {
             const promptUsuario = document.getElementById("prompt").value;
 
+            enviarMensagem(promptUsuario);
             // Adiciona a mensagem do usuário ao histórico
             history.push({
                 role: "user",
@@ -341,18 +326,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        function enviarMensagem() {
-            const mensagem = document.getElementById('prompt').value;
-
-            // Limpa o campo de entrada
-            document.getElementById("prompt").value = "";
+        function enviarMensagem(mensagem) {
 
             const dados = {
                 usuario: 'Usuário',
                 mensagem: mensagem
             };
 
-            axios.post('http://localhost:3000/historico', dados)
+            axios.post('https://render-9441.onrender.com/historico', dados)
                 .then(response => {
                     console.log('Resposta do servidor:', response.data);
                 })
