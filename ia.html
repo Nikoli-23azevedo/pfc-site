@@ -215,7 +215,7 @@
 
         import { GoogleGenerativeAI } from "@google/generative-ai";
 
-        const API_KEY = "AIzaSyA88bIiHnpOQWfbFhpxIlOlN1K36VmuFPY";
+        const API_KEY = "AIzaSyCQOhRV20pKZ32qU0oCjtKgjZSr1qV9fGA";
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -333,7 +333,7 @@
                 mensagem: mensagem
             };
 
-            axios.post('https://render-9441.onrender.com/historico', dados)
+            axios.post('https://render-1-9vkf.onrender.com/historico', dados)
                 .then(response => {
                     console.log('Resposta do servidor:', response.data);
                 })
